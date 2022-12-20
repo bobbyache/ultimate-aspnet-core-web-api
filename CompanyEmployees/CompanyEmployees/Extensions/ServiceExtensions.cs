@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Contracts;
+using LoggerService;
+using System.Runtime.CompilerServices;
 
 namespace CompanyEmployees.Extensions;
 public static class ServiceExtensions
@@ -16,6 +18,7 @@ public static class ServiceExtensions
             // Keep all default properties for now...
         });
 
-
+    public static void ConfigureLoggerService(this IServiceCollection services) =>
+        services.AddSingleton<ILoggerManager, LoggerManager>();
 }
 
