@@ -1,6 +1,10 @@
 ﻿using Contracts;
 using LoggerService;
+using Service.Contracts;
+using Service;
 using System.Runtime.CompilerServices;
+using Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace CompanyEmployees.Extensions;
 public static class ServiceExtensions
@@ -12,6 +16,10 @@ public static class ServiceExtensions
                 .AllowAnyMethod().AllowAnyHeader());
         });
 
+    public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) => 
+        services.AddDbContext<RepositoryContext>(options => 
+            options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
     public static void ConfigureIISIntegration(this IServiceCollection services) =>
         services.Configure<IISOptions>(options =>
         {
@@ -22,6 +30,9 @@ public static class ServiceExtensions
         services.AddSingleton<ILoggerManager, LoggerManager>();
 
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
-        services.AddScoped<IRepositoryManager, IRepositoryManager>();
+        services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+    public static void ConfigureServiceManager(this IServiceCollection services) => 
+        services.AddScoped<IServiceManager, ServiceManager>();
 }
 
